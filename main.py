@@ -106,7 +106,6 @@ while not correctResponse:
     else:
         print('Incorrect response...')
         sleep(1)
-        correctResponse = False
 
         
 # get a dictionary that maps postal codes to km and pay, requires the postal codes file in directory (with my name change)
