@@ -166,7 +166,7 @@ with open('novFiles.txt') as txt:
 calls.sort(key=lambda item:item['date']) # sort calls by date
 
 for call in calls:
-    if namefilter in call['name']: # applying filter from 2 lines above ^
+    if namefilter in call['name']:
         print('\n\nName: ' + bcolors.BOLD + bcolors.FAIL + call['name'] + bcolors.ENDC)
         print('Date: ' + call['date'][:8] + bcolors.WARNING + call['date'][8:] + bcolors.ENDC)
         print('Address:', call['address'])
