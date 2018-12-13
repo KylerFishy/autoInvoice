@@ -1,17 +1,11 @@
-import re
-import xlrd
-import xlwt
-import os.path
-import openpyxl
-from datetime import datetime, timedelta
 from Invoice import *
 
-command = getUserCommands()
-
 # Create postalCodes to pay/km map, make list to store all the calls, and initialize a call dictionary
+# get input from user
 postalCodes = readPostalCodes()
 calls = []
 call = initializeCallObj()
+command, fileName = getUserCommands()
 
 # Collect all call data
 with open('novFiles.txt') as txt:
@@ -47,4 +41,5 @@ for call in calls:
     if command.lower() == 'i':
         continueToNextCall = excelEntryPrompt(call, fileName)
         if not continueToNextCall:
+            print('Quitting...')
             break
