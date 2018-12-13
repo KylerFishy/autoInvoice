@@ -36,10 +36,10 @@ with open('novFiles.txt') as txt:
 calls.sort(key=lambda item:item['date']) # sort calls by date
 
 for call in calls:
-    printCallSummary(call, command)
+    printCallSummary(call, command) # command just to determine if weekday should be printed here
 
     if command.lower() == 'i': # if user chose to create (i)nvoice data
-        continueToNextCall = excelEntryPrompt(call, fileName)
+        continueToNextCall = excelEntryPrompt(call, fileName) # returns false if user quits
         if not continueToNextCall:
             print('Quitting...')
             break
