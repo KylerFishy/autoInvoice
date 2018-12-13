@@ -1,7 +1,7 @@
 from Invoice import *
 
-# Create postalCodes to pay/km map, make list to store all the calls, and initialize a call dictionary
-# get input from user
+# Create dict mapping postalCodes to km and pay, make list to store all the calls, 
+# initialize a call dictionary, and get input from user (print calls or make invoice)
 postalCodes = readPostalCodes()
 calls = []
 call = initializeCallObj()
