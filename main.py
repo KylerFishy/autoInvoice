@@ -31,7 +31,7 @@ with open('novFiles.txt') as txt:
                 
         if '----PART.BOUNDARY.1--' in line: # markes end of call, save to data structure
             calls.append(call) # calls is a list of dictionaries (and each dict is a call)
-            call = initializeCallObj()
+            call = initializeCallObj() # reset call dictionary obj
 
 calls.sort(key=lambda item:item['date']) # sort calls by date
 
