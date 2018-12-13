@@ -38,7 +38,7 @@ calls.sort(key=lambda item:item['date']) # sort calls by date
 for call in calls:
     printCallSummary(call, command)
 
-    if command.lower() == 'i':
+    if command.lower() == 'i': # if user chose to create (i)nvoice data
         continueToNextCall = excelEntryPrompt(call, fileName)
         if not continueToNextCall:
             print('Quitting...')
