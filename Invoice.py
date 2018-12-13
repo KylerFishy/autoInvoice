@@ -69,6 +69,7 @@ def lookForAddress(line, postalCodes):
         return False
 
 def getUserCommands():
+    fileName = ""
     correctResponse = False
     while not correctResponse:
         usageResponse = input('Produce invoice data (i) or just print calls to console (c)? ')
@@ -81,7 +82,7 @@ def getUserCommands():
         else:
             print('incorrect response, enter i or c')
             sleep(1)
-    return usageResponse
+    return usageResponse, fileName
 
 def printCallSummary(call, usageResponse):
     print('\n\nName: ' + bcolors.BOLD + bcolors.FAIL + call['name'] + bcolors.ENDC)
