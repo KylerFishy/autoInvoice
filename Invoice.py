@@ -165,16 +165,22 @@ def addEntryToExcel(fileName, data):
     sheet.append(data)
     wb.save(fileName)
 
-def excelEntryPrompt(call, fileName):
+def excelEntryPrompt(call, fileName, totalPay):
     workedIt = input("(q to quit)\nDid you work this " + bcolors.WARNING + call['day'] + bcolors.ENDC + " call (1/0)? \n\n")
     if workedIt.lower() == 'q':
-        return False
+        return False, totalPay
     elif int(workedIt) == 1:
         call['time'] = input("Time on site (minutes)? ")
         call['time'] = str(timedelta(minutes=int(call['time']))) # format the time string
         call['time'] = call['time'][:len(call['time'])-3]
 
-        call['numTerm']= input("Number of terminals? ")
+        call['numTerm'] = input("Number of terminals? ")
+
+        # add 10$ for each additional terminal
+        if int(call['numTerm']) > 1:
+            for i in range(int(call['numTerm'])-1):
+                newPay = float(call['pay'][1:]) + 10
+                call['pay'] = '$' + str(newPay)
 
         # Determine call type
         if call['callNum'] == "N/A":
@@ -185,8 +191,12 @@ def excelEntryPrompt(call, fileName):
         # Format km
         if int(call['km']) <= 10 and int(call['km']) > 0:
             call['km'] = "0-10"
-        elif int(km) <= 60:
+            if call['pay'] == '0':
+                call['pay'] = '$27.00'
+        elif int(call['km']) <= 60:
             call['km'] = "11-60"
+            if call['pay'] == '0':
+                call['pay'] = '$60.00'
 
         # Determine 'ins' field
         if len(call['merchantNum']) == 9:
@@ -195,14 +205,20 @@ def excelEntryPrompt(call, fileName):
             else:
                 call['ins'] = 'RB'
         else:
-            ins = input("Could not determine 'ins' from merchant #, please provide (RB/ATB):")
+            call['ins'] = input("Could not determine 'ins' from merchant #, please provide (RB/ATB):")
+
+        if call['pay'] == 0:
+            call['pay'] = '$' + input("Could not determine pay from postal code, provide call pay (integer): ") + '.00'
 
         data = [call['date'], call['callNum'], call['ticketNum'], "", "", call['postalCode']
                 , call['name'], call['ins'], call['time'], call['desc'], call['km'], call['numTerm'], call['pay']]
         promptForMissingFields(data)
-        data[12] = data[12]+'0' # dirty fix to add extra zero to pay field
+        data[12] = str(data[12])+'0' # dirty fix to add extra zero to pay field
         addEntryToExcel(fileName, data)
-        return True
+        totalPay += float(call['pay'][1:])
+        print('\n' + bcolors.OKBLUE + 'TOTAL PAY: ' + str(totalPay) + '$' + bcolors.ENDC + '\n')
+        return True, totalPay
+    return True, totalPay
 
 def initializeCallObj():
     call = {}
