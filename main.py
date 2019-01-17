@@ -1,14 +1,15 @@
 from Invoice import *
 
-# Create dict mapping postalCodes to km and pay, make list to store all the calls, 
-# initialize a call dictionary, and get input from user (print calls or make invoice)
+# Create postalCodes to pay/km map, make list to store all the calls, and initialize a call dictionary
+# get input from user
 postalCodes = readPostalCodes()
 calls = []
 call = initializeCallObj()
 command, fileName = getUserCommands()
+totalPay = 0
 
 # Collect all call data
-with open('novFiles.txt') as txt:
+with open('callsJanuary.txt') as txt:
     for line in txt: # for each line in email data..
                 
         if lookForDate(line):
@@ -31,15 +32,15 @@ with open('novFiles.txt') as txt:
                 
         if '----PART.BOUNDARY.1--' in line: # markes end of call, save to data structure
             calls.append(call) # calls is a list of dictionaries (and each dict is a call)
-            call = initializeCallObj() # reset call dictionary obj
+            call = initializeCallObj()
 
 calls.sort(key=lambda item:item['date']) # sort calls by date
 
 for call in calls:
-    printCallSummary(call, command) # command just to determine if weekday should be printed here
+    printCallSummary(call, command)
 
-    if command.lower() == 'i': # if user chose to create (i)nvoice data
-        continueToNextCall = excelEntryPrompt(call, fileName) # returns false if user quits
+    if command.lower() == 'i':
+        continueToNextCall, totalPay = excelEntryPrompt(call, fileName, totalPay)
         if not continueToNextCall:
             print('Quitting...')
             break
